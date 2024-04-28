@@ -32,3 +32,20 @@ def mongodb_test(cls):
 
     new_cls = type(cls.__name__, (_MongoDBTestCase, cls), {})
     return mark.mongodb(new_cls)
+
+
+class _ElasticsearchTestCase:
+    @fixture(scope="session")
+    def database_url(self, elasticsearch_url):
+        return elasticsearch_url
+
+    @fixture(scope="session")
+    def db_type(self):
+        return "elasticsearch"
+
+
+def elasticsearch_test(cls):
+    assert isinstance(cls, type), "elasticsearch_test can only be used with classes"
+
+    new_cls = type(cls.__name__, (_ElasticsearchTestCase, cls), {})
+    return mark.elasticsearch(new_cls)
